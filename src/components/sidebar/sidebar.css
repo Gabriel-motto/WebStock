@@ -1,0 +1,8 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    height: 90vh;
+    background-color: rgba(26, 43, 66, 1);
+}
