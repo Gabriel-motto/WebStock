@@ -6,20 +6,22 @@ import { HiOutlineWrenchScrewdriver } from "react-icons/hi2";
 
 function Sidebar() {
     return (
-        <div className="nav">
-            <IconContext.Provider value={{ color: "white" }}>
-                <Button
-                    className="item"
-                    variant="ghost">
-                    <PiFactory />
-                </Button>
-                <Button
-                    className="item"
-                    variant="ghost">
-                    <HiOutlineWrenchScrewdriver />
-                </Button>
-            </IconContext.Provider>
-        </div>
+        <>
+            <div className="nav">
+                <IconContext.Provider value={{ color: "white" }}>
+                    <Button
+                        className="item"
+                        variant="ghost">
+                        <PiFactory />
+                    </Button>
+                    <Button
+                        className="item"
+                        variant="ghost">
+                        <HiOutlineWrenchScrewdriver />
+                    </Button>
+                </IconContext.Provider>
+            </div>
+        </>
     );
 }
 
