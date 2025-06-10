@@ -1,5 +1,6 @@
-import { Button, Card, Image, Text } from "@chakra-ui/react";
+import { useState } from "react";
 import { TabComponent } from "../components/ui/tab-component.jsx";
+import "./Pieces.css";
 
 const contentData = [
     {
@@ -44,44 +45,53 @@ const contentData = [
 
 const tabData = [
     {
+        id: "all",
+        title: "Todas",
+    },
+    {
         id: "mechanics",
         title: "Mecánica",
-        Content: "a",
     },
     {
         id: "electronics",
         title: "Electrónica",
-        Content: "b",
-    },
-    {
-        id: "all",
-        title: "Todas",
-        Content: "c",
     },
 ];
 
-function CardContent({ workshop }) {
-    const contentDataFiltered = contentData.filter(
-        (content) => content.workshop === workshop
-    );
+function CardComponent({ workshop }) {
+    let contentDataFiltered;
+    if (workshop.value === "all") {
+        contentDataFiltered = contentData;
+    } else {
+        contentDataFiltered = contentData.filter(
+            (content) => content.workshop === workshop.value
+        );
+    }
 
     return (
         <div className="grid-container">
             {contentDataFiltered.map((content, index) => (
                 <Card.Root
-                    className=".content-card"
+                    className="content-card"
                     key={index}>
                     <Image
                         src={content.image}
                         alt={`Producto con referencia: ${content.title}`}
                         padding="10px"
                     />
-                    <Card.Body gap="2">
-                        <Card.Title>{content.title}</Card.Title>
-                        <Card.Description>
+                    <Card.Body
+                        gap="2"
+                        className="body">
+                        <Card.Title className="title">
+                            {content.title}
+                        </Card.Title>
+                        <Card.Description
+                            className="description"
+                            lineClamp="3">
                             {content.description}
                         </Card.Description>
                         <Text
+                            className="brand"
                             textStyle="2xl"
                             letterSpacing="tight"
                             mt="2">
@@ -107,13 +117,21 @@ function CardContent({ workshop }) {
 }
 
 function PiecesPage() {
+    const [workshop, setWorkshop] = useState({ value: "all" });
+    
+    const handleWorkshopChange = (value) => {
+        setWorkshop(value);
+    };
+
     return (
         <>
-            <div className="content">
+            <div className="container">
                 <TabComponent
-                    tabContent={tabData}
-                    defaultValue="mechanics"
+                    tabListContent={tabData}
+                    defaultValue={"all"}
+                    dataFromChild={handleWorkshopChange}
                 />
+                <CardComponent workshop={workshop}/>
             </div>
         </>
     );

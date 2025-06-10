@@ -27,3 +27,8 @@ export const ROUTES = [
         Component: SummaryPage
     }
 ]
+
+export const COLOR = {
+    CORPYELLOW: "#FBBA00",
+    CORPBLUE: "#1A2B42",
+}

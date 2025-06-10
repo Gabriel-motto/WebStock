@@ -6,10 +6,10 @@ export function navigateTo (href) {
     window.dispatchEvent(navigationEvent)
 }
 
-export function LinkCustom ({ target, to, ...props }) {
+export function CustomLink ({ target, to, ...props }) {
     const handleClick = (event) => {
         event.preventDefault()
-        navigate(to)
+        navigateTo(to)
     }
 
     return <a href={to} onClick={handleClick} target={target} {...props} />

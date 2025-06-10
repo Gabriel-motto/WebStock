@@ -1,6 +1,6 @@
 import "./App.css";
 import Header from "./components/header/header-component.jsx";
-import Sidebar from "./components/sidebar/sidebar.jsx";
+import Sidebar from "./components/sidebar/sidebar-component.jsx";
 import Router from "./Router.jsx";
 import { ROUTES } from "./utils/consts";
 
@@ -15,7 +15,9 @@ function App() {
                     <div className="sidebar">
                         <Sidebar />
                     </div>
-                    <Router routes={ROUTES} />
+                    <div className="content">
+                        <Router routes={ROUTES} />
+                    </div>
                 </div>
             </div>
         </>

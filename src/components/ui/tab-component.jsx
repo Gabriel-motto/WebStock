@@ -1,9 +1,13 @@
 import { Tabs } from "@chakra-ui/react";
 
-export function TabComponent({ tabContent, defaultValue }) {
+export function TabComponent({ tabContent, defaultValue, dataFromChild }) {
+    const handleTabsChange = (index) => {
+        dataFromChild(index);
+    };
+
     return (
         <>
-            <Tabs.Root defaultValue={defaultValue}>
+            <Tabs.Root defaultValue={defaultValue} onValueChange={handleTabsChange}>
                 <Tabs.List>
                     {tabContent.map((tab) => (
                         <Tabs.Trigger
@@ -13,9 +17,6 @@ export function TabComponent({ tabContent, defaultValue }) {
                         </Tabs.Trigger>
                     ))}
                 </Tabs.List>
-                {tabContent.map((tab) => (
-                    <Tabs.Content value={tab.id}>{tab.Content}</Tabs.Content>
-                ))}
             </Tabs.Root>
         </>
     );
