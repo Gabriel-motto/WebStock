@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { TabComponent } from "../components/ui/tab-component.jsx";
+import { Card, Button, Image, Text } from "@chakra-ui/react"
+import DialogComponent from "../components/dialog/dialog-component.jsx"
 import "./Pieces.css";
 
 const contentData = [
@@ -123,11 +125,16 @@ function PiecesPage() {
         setWorkshop(value);
     };
 
+
     return (
         <>
             <div className="container">
+                <DialogComponent 
+                    textButton="Nueva pieza"
+                    title="Añadir una nueva pieza"
+                    content=""/>
                 <TabComponent
-                    tabListContent={tabData}
+                    tabContent={tabData}
                     defaultValue={"all"}
                     dataFromChild={handleWorkshopChange}
                 />

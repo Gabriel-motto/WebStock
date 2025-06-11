@@ -19,3 +19,12 @@
 .description {
     height: 65px;
 }
+
+.dialog-button {
+    float: right;
+    z-index: 1;
+}
+
+.dialog-button:hover {
+    background-color: rgba(26, 43, 66, .90);
+}
