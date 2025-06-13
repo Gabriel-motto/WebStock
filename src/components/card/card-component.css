@@ -1,0 +1,15 @@
+.content-card {
+    max-height: fit-content;
+}
+
+.body {
+    max-height: fit-content;
+}
+
+.description {
+    height: 65px;
+}
+
+.title {
+    height: 50px;
+}

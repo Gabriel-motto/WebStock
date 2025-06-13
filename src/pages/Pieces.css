@@ -8,18 +8,6 @@
     padding-top: 20px;
 }
 
-.content-card {
-    max-height: fit-content;
-}
-
-.body {
-    max-height: fit-content;
-}
-
-.description {
-    height: 65px;
-}
-
 .dialog-button {
     float: right;
     z-index: 1;

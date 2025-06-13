@@ -1,24 +1,51 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import machinesData from "../dbMachines.json";
+import { CardComponent } from "../components/card/card-component.jsx";
+import { SelectComponent } from "../components/ui/select-component.jsx";
+import { AccordionComponent } from "../components/ui/accordion-component.jsx"
+import "./Machines.css";
 
 export default function MachinesPage() {
-    const [data, setData] = useState([]);
+    const [machines, setMachines] = useState(machinesData);
+    const [assemblyLine, setAssemblyLine] = useState("");
 
-    useEffect(() => {
-        fetch(
-            "http://10.176.99.23/Prisma/api/AssetTree/GetChildAssets?parentAsset=HP1&loadSpares=false&loadMainDoc=false"
-        )
-            .then((response) => response.json())
-            .then((json) => setData(json));
-    }, []);
+    const handleAssemblyLineChange = (value) => {
+        setAssemblyLine(value);
+    }
+
+    let filteredMachines = machines;
+    if (assemblyLine !== "") {
+        filteredMachines = machines.filter(
+            (machine) => machine.assemblyLine === assemblyLine
+        );
+    }
+
+    const uniqueValues = [];
+    machines.map((value) => {
+        if (!uniqueValues.includes(value.assemblyLine)) {
+            uniqueValues.push(value.assemblyLine);
+        }
+    });
 
     return (
-        <>
-            {data.map((item, index) => (
-                <div className="content">
-                    <h1 key={index}>{item.parentAsset}</h1>
-                    <h2 key={index}>{item.entityKey}</h2>
-                </div>
-            ))}
-        </>
-    );
+        <main>
+            <SelectComponent
+                className="select"
+                values={uniqueValues}
+                dataFromChild={handleAssemblyLineChange}
+            />
+            <div className="grid-machines">
+                {filteredMachines.map((machine, index) => (
+                    <CardComponent
+                        key={index}
+                        title={machine.id}
+                        description={machine.text.substring(
+                            machine.text.indexOf("/") + 2
+                        )}
+                        footer={machine.assemblyLine}
+                    />
+                ))}
+            </div>
+        </main>
+    )
 }

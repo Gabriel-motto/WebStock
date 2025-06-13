@@ -5,6 +5,10 @@
     height: 100vh;
     background-color: rgba(26, 43, 66, 1);
     padding-top: 5vh;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 @media screen and (max-width: 768px) {

@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { Button } from "@chakra-ui/react";
 import { TabComponent } from "../components/ui/tab-component.jsx";
-import { Card, Button, Image, Text } from "@chakra-ui/react"
-import DialogComponent from "../components/dialog/dialog-component.jsx"
+import { DialogComponentEx } from "../components/dialog/dialog-component.jsx";
+import { CardComponentImage } from "../components/card/card-component.jsx";
 import "./Pieces.css";
 
-const contentData = [
+const dataPieces = [
     {
         title: "6FC 5357-0BB33-0AE0",
         description:
@@ -60,85 +61,57 @@ const tabData = [
     },
 ];
 
-function CardComponent({ workshop }) {
-    let contentDataFiltered;
-    if (workshop.value === "all") {
-        contentDataFiltered = contentData;
-    } else {
-        contentDataFiltered = contentData.filter(
+function PiecesPage() {
+    const [workshop, setWorkshop] = useState({ value: "all" });
+    const [showDialog, setShowDialog] = useState(false);
+
+    const handleCloseDialog = () => {
+        setShowDialog(false);
+    };
+
+    const handleWorkshopChange = (value) => {
+        setWorkshop(value);
+    };
+
+    let contentDataFiltered = dataPieces;
+    if (workshop.value !== "all") {
+        contentDataFiltered = dataPieces.filter(
             (content) => content.workshop === workshop.value
         );
     }
 
     return (
-        <div className="grid-container">
-            {contentDataFiltered.map((content, index) => (
-                <Card.Root
-                    className="content-card"
-                    key={index}>
-                    <Image
-                        src={content.image}
-                        alt={`Producto con referencia: ${content.title}`}
-                        padding="10px"
-                    />
-                    <Card.Body
-                        gap="2"
-                        className="body">
-                        <Card.Title className="title">
-                            {content.title}
-                        </Card.Title>
-                        <Card.Description
-                            className="description"
-                            lineClamp="3">
-                            {content.description}
-                        </Card.Description>
-                        <Text
-                            className="brand"
-                            textStyle="2xl"
-                            letterSpacing="tight"
-                            mt="2">
-                            {content.brand}
-                        </Text>
-                    </Card.Body>
-                    <Card.Footer>
-                        <Button
-                            variant="solid"
-                            colorPalette="blue">
-                            Añadir
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            colorPalette="red">
-                            Eliminar
-                        </Button>
-                    </Card.Footer>
-                </Card.Root>
-            ))}
-        </div>
-    );
-}
-
-function PiecesPage() {
-    const [workshop, setWorkshop] = useState({ value: "all" });
-    
-    const handleWorkshopChange = (value) => {
-        setWorkshop(value);
-    };
-
-
-    return (
         <>
             <div className="container">
-                <DialogComponent 
-                    textButton="Nueva pieza"
+                <DialogComponentEx
                     title="Añadir una nueva pieza"
-                    content=""/>
+                    content=""
+                    show={showDialog}
+                    close={handleCloseDialog}
+                />
+                <Button
+                    className="dialog-button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={setShowDialog}>
+                    Añadir pieza
+                </Button>
                 <TabComponent
                     tabContent={tabData}
                     defaultValue={"all"}
                     dataFromChild={handleWorkshopChange}
                 />
-                <CardComponent workshop={workshop}/>
+                <div className="grid-container">
+                    {contentDataFiltered.map((data, index) => (
+                        <CardComponentImage
+                            key={index}
+                            title={data.title}
+                            image={data.image}
+                            description={data.description}
+                            footer={data.brand}
+                        />
+                    ))}
+                </div>
             </div>
         </>
     );
