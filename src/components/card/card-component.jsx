@@ -27,9 +27,17 @@ export function CardComponent({ title, description, footer }) {
     );
 }
 
-export function CardComponentImage({ title, image, description, footer }) {
+export function CardComponentImage({
+    title,
+    image,
+    description,
+    footer,
+    ...props
+}) {
     return (
-        <Card.Root className="content-card">
+        <Card.Root
+            className="content-card"
+            {...props}>
             <Image
                 src={image}
                 alt={`Producto con referencia: ${title}`}
@@ -38,7 +46,7 @@ export function CardComponentImage({ title, image, description, footer }) {
             <Card.Body
                 gap="2"
                 className="body">
-                <Card.Title className="title">{title}</Card.Title>
+                <Card.Title className="title" fontWeight="medium">{title}</Card.Title>
                 <Card.Description
                     className="description"
                     lineClamp="3">

@@ -1,9 +1,10 @@
 import { Accordion } from "@chakra-ui/react";
 
-export function AccordionComponent({ content, component }) {
+export function AccordionComponent({ content, component, ...props }) {
     return (
         <Accordion.Root
-            collapsible>
+            collapsible
+            {...props}>
             {content.map((item, index) => (
                 <Accordion.Item
                     key={index}

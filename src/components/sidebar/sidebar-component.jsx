@@ -23,16 +23,10 @@ function Sidebar() {
                             variant="ghost"
                             colorPalette="blue"
                             asChild>
-                            <div className="button-content">
-                                <div className="icon">
-                                    <IoHomeOutline />
-                                </div>
-                                <CustomLink
-                                    className="link"
-                                    to="/">
-                                    Home
-                                </CustomLink>
-                            </div>
+                            <CustomLink to="/">
+                                <IoHomeOutline className="button-icon" />
+                                <span className="button-text">Home</span>
+                            </CustomLink>
                         </Button>
                     </Tooltip>
                     <Tooltip
@@ -45,16 +39,10 @@ function Sidebar() {
                             variant="ghost"
                             colorPalette="blue"
                             asChild>
-                            <div className="button-content">
-                                <div className="icon">
-                                    <PiFactory />
-                                </div>
-                                <CustomLink
-                                    className="link"
-                                    to="/machines">
-                                    Máquinas
-                                </CustomLink>
-                            </div>
+                            <CustomLink to="/machines">
+                                <PiFactory className="button-icon" />
+                                <span className="button-text">Máquinas</span>
+                            </CustomLink>
                         </Button>
                     </Tooltip>
                     <Tooltip
@@ -67,16 +55,10 @@ function Sidebar() {
                             variant="ghost"
                             colorPalette="blue"
                             asChild>
-                            <div className="button-content">
-                                <div className="icon">
-                                    <HiOutlineWrenchScrewdriver />
-                                </div>
-                                <CustomLink
-                                    className="link"
-                                    to="/pieces">
-                                    Piezas
-                                </CustomLink>
-                            </div>
+                            <CustomLink to="/pieces">
+                                <HiOutlineWrenchScrewdriver className="button-icon" />
+                                <span className="button-text">Piezas</span>
+                            </CustomLink>
                         </Button>
                     </Tooltip>
                 </IconContext.Provider>

@@ -1,6 +1,6 @@
 import { Tabs } from "@chakra-ui/react";
 
-export function TabComponent({ tabContent, defaultValue, dataFromChild }) {
+export function TabComponent({ tabContent, defaultValue, dataFromChild, ...props }) {
     const handleTabsChange = (index) => {
         dataFromChild(index);
     };

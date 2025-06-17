@@ -68,7 +68,7 @@ function Header() {
   return (
     <div className="header-content">
       <img
-        src="src/assets/GNK_logo_blanco.png"
+        src="assets/GNK_logo_blanco.png"
         alt="GNK logo png sin fondo azul"
         className="header-logo"
       />
