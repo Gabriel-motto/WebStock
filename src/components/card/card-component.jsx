@@ -1,9 +1,11 @@
 import { Card, Button, Image, Text } from "@chakra-ui/react";
 import "./card-component.css";
 
-export function CardComponent({ title, description, footer }) {
+export function CardComponent({ title, description, footer, ...props }) {
     return (
-        <Card.Root className="content-card">
+        <Card.Root
+            className="content-card"
+            {...props}>
             <Card.Body
                 gap="2"
                 className="body">
@@ -46,7 +48,11 @@ export function CardComponentImage({
             <Card.Body
                 gap="2"
                 className="body">
-                <Card.Title className="title" fontWeight="medium">{title}</Card.Title>
+                <Card.Title
+                    className="title"
+                    fontWeight="medium">
+                    {title}
+                </Card.Title>
                 <Card.Description
                     className="description"
                     lineClamp="3">

@@ -2,7 +2,6 @@ import { useState } from "react";
 import machinesData from "../dbMachines.json";
 import { CardComponent } from "../components/card/card-component.jsx";
 import { SelectComponent } from "../components/ui/select-component.jsx";
-import { AccordionComponent } from "../components/ui/accordion-component.jsx"
 import "./Machines.css";
 
 export default function MachinesPage() {
@@ -11,7 +10,7 @@ export default function MachinesPage() {
 
     const handleAssemblyLineChange = (value) => {
         setAssemblyLine(value);
-    }
+    };
 
     let filteredMachines = machines;
     if (assemblyLine !== "") {
@@ -37,6 +36,7 @@ export default function MachinesPage() {
             <div className="grid-machines">
                 {filteredMachines.map((machine, index) => (
                     <CardComponent
+                        className="machines-card"
                         key={index}
                         title={machine.id}
                         description={machine.text.substring(
@@ -47,5 +47,5 @@ export default function MachinesPage() {
                 ))}
             </div>
         </main>
-    )
+    );
 }

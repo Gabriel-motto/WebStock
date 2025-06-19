@@ -5,10 +5,10 @@
     height: 100vh;
     background-color: rgba(26, 43, 66, 1);
     padding-top: 5vh;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
     z-index: 1;
+    top: 0;
+    position: sticky;
+    transition: all 0.5s ease-in;
 }
 
 @media screen and (max-width: 768px) {
@@ -16,7 +16,7 @@
         width: 50px;
         height: 100vh;
         padding-top: 5vh;
-        transition: all 0.5s;
+        transition: all 0.5s ease-in;
     }
     .button-text {
         content-visibility: hidden;

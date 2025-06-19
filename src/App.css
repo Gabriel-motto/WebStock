@@ -12,18 +12,16 @@
     display: flex;
     gap: 10px;
     width: 100%;
-    height: 100%;
     padding-right: 10px;
+    transition: all 0.5s ease-in;
 }
 
 .sidebar {
     min-width: 180px;
-    transition: all 0.5s; 
 }
 
 .content {
     width: 100%;
-    height: 100vh;
     padding: 20px 10px 0px 10px;
 }
 
