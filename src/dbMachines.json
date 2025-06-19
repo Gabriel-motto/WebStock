@@ -1717,24 +1717,6 @@
         "text": "WQ3424 / Torno Vertical EMAG VTC 250"
     },
     {
-        "id": "WQ3124",
-        "name": "WQ3124",
-        "assemblyLine": "HDDO1",
-        "text": "WQ3124 / TORNO DO"
-    },
-    {
-        "id": "WQ3126",
-        "name": "WQ3126",
-        "assemblyLine": "HDDO1",
-        "text": "WQ3126 / TORNO DO"
-    },
-    {
-        "id": "WQ3424",
-        "name": "WQ3424",
-        "assemblyLine": "HDDO1",
-        "text": "WQ3424 / Torno Vertical EMAG VTC 250"
-    },
-    {
         "id": "AG5299",
         "name": "AG5299",
         "assemblyLine": "SF1",
