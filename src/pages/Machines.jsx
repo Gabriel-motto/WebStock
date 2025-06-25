@@ -1,36 +1,50 @@
-import { useState } from "react";
-import machinesData from "../dbMachines.json";
+import { useState, useEffect } from "react";
+import supabase from "../utils/supabase";
 import { CardComponent } from "../components/card/card-component.jsx";
 import { SelectComponent } from "../components/ui/select-component.jsx";
 import "./Machines.css";
 
 export default function MachinesPage() {
-    const [machines, setMachines] = useState(machinesData);
-    const [assemblyLine, setAssemblyLine] = useState("");
+    const [machines, setMachines] = useState([]);
+    const [assemblyLines, setAssemblyLines] = useState([]);
+    const [selectedALine, setSelectedAline] = useState("");
 
     const handleAssemblyLineChange = (value) => {
-        setAssemblyLine(value);
+        setSelectedAline(value);
     };
 
+    useEffect(() => {
+        async function getMachines() {
+            const { data: machines } = await supabase
+                .from("Machines")
+                .select();
+            setMachines(machines);
+        }
+        getMachines();
+    }, []);
+
+    useEffect(() => {
+        async function getAssemblyLines() {
+            const { data: assemblyLines } = await supabase
+                .from("Assembly Lines")
+                .select();
+            setAssemblyLines(assemblyLines)
+        }
+        getAssemblyLines();
+    }, []);
+
     let filteredMachines = machines;
-    if (assemblyLine !== "") {
+    if (selectedALine !== "") {
         filteredMachines = machines.filter(
-            (machine) => machine.assemblyLine === assemblyLine
+            (machine) => machine.assembly_line === selectedALine
         );
     }
-
-    const uniqueValues = [];
-    machines.map((value) => {
-        if (!uniqueValues.includes(value.assemblyLine)) {
-            uniqueValues.push(value.assemblyLine);
-        }
-    });
 
     return (
         <main>
             <SelectComponent
                 className="select"
-                values={uniqueValues}
+                values={assemblyLines}
                 dataFromChild={handleAssemblyLineChange}
             />
             <div className="grid-machines">
@@ -38,11 +52,9 @@ export default function MachinesPage() {
                     <CardComponent
                         className="machines-card"
                         key={index}
-                        title={machine.id}
-                        description={machine.text.substring(
-                            machine.text.indexOf("/") + 2
-                        )}
-                        footer={machine.assemblyLine}
+                        title={machine.name}
+                        description={machine.description}
+                        footer={machine.assembly_line}
                     />
                 ))}
             </div>

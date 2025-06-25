@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Button, Image, Text, Badge, Separator } from "@chakra-ui/react";
+import {
+    Button,
+    Image,
+    Text,
+    Badge,
+    Separator,
+    Fieldset,
+    Field,
+    Input,
+    ButtonGroup,
+} from "@chakra-ui/react";
 import { TabComponent } from "../components/ui/tab-component.jsx";
 import DialogComponent from "../components/dialog/dialog-component.jsx";
 import { CardComponentImage } from "../components/card/card-component.jsx";
@@ -61,7 +71,7 @@ const tabData = [
     },
 ];
 
-const DetailsDialog = ({ data }) => {
+function DetailsDialog({ data }) {
     return (
         <>
             <div className="container-box">
@@ -83,7 +93,10 @@ const DetailsDialog = ({ data }) => {
                             {data.brand}
                         </Text>
                     </div>
-                    <Text className="description-box" fontSize="18px" letterSpacing="wide">
+                    <Text
+                        className="description-box"
+                        fontSize="18px"
+                        letterSpacing="wide">
                         {data.description}
                     </Text>
                     <Badge
@@ -91,14 +104,150 @@ const DetailsDialog = ({ data }) => {
                         variant="solid"
                         className="workshop-badge"
                         size="lg">
-                        {data.workshop === "mechanics" ? "Mecánica" : "Electrónica"}
+                        {data.workshop === "mechanics"
+                            ? "Mecánica"
+                            : "Electrónica"}
                     </Badge>
                 </div>
             </div>
-            <Separator className="separator-dialog" size="md"/>
+            <Separator
+                className="separator-dialog"
+                size="md"
+            />
         </>
     );
-};
+}
+
+function handleSubmit(formData) {
+    const data = formData;
+    console.log(
+        formData.get("name") +
+            " " +
+            formData.get("type") +
+            " " +
+            formData.get("brand") +
+            " " +
+            formData.get("description") +
+            " " +
+            formData.get("workshop") +
+            " " +
+            formData.get("amount") +
+            " " +
+            formData.get("location") +
+            " " +
+            formData.get("machine")
+    );
+
+    // useEffect(() => {
+    //     async function insertPiece() {
+    //         const { data, error } = await supabase
+    //             .from("Pieces")
+    //             .insert([{
+    //                 name: formData.get("name"),
+    //                 type: formData.get("type"),
+    //                 brand: formData.get("brand"),
+    //                 description: formData.get("description"),
+    //                 workshop: formData.get("workshop"),
+    //                 amount: formData.get("amount"),
+    //                 location: formData.get("location"),
+    //                 machine: formData.get("machine"),
+    //             }])
+    //             .select()
+    //     }
+    //     insertPiece();
+    // }, []);
+}
+
+function NewPiece({ handleCancel }) {
+    return (
+        <form action={handleSubmit}>
+            <Fieldset.Root>
+                <Fieldset.Content>
+                    <Field.Root>
+                        <Field.Label>Referencia</Field.Label>
+                        <Input
+                            name="name"
+                            className="input-form name-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Tipo</Field.Label>
+                        <Input
+                            name="type"
+                            className="input-form type-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Marca</Field.Label>
+                        <Input
+                            name="brand"
+                            className="input-form brand-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Descripcion</Field.Label>
+                        <Input
+                            name="description"
+                            className="input-form description-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Tipo de repuesto</Field.Label>
+                        <Input
+                            name="workshop"
+                            className="input-form workshop-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Cantidad</Field.Label>
+                        <Input
+                            name="amount"
+                            className="input-form amount-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Localizacion</Field.Label>
+                        <Input
+                            name="location"
+                            className="input-form location-form"
+                        />
+                    </Field.Root>
+
+                    <Field.Root>
+                        <Field.Label>Máquina</Field.Label>
+                        <Input
+                            name="machine"
+                            className="input-form machine-form"
+                        />
+                    </Field.Root>
+                </Fieldset.Content>
+
+                <ButtonGroup
+                    variant="outline"
+                    className="buttons-form">
+                    <Button
+                        className="btn btn-add"
+                        colorPalette="blue"
+                        type="submit">
+                        Añadir
+                    </Button>
+                    <Button
+                        className="btn btn-cancel"
+                        colorPalette="red"
+                        onClick={handleCancel}>
+                        Cancelar
+                    </Button>
+                </ButtonGroup>
+            </Fieldset.Root>
+        </form>
+    );
+}
 
 function PiecesPage() {
     const [workshop, setWorkshop] = useState({ value: "all" });
@@ -129,59 +278,57 @@ function PiecesPage() {
     }
 
     return (
-        <>
-            <div className="container">
-                <DialogComponent
-                    size="cover"
-                    title="Añadir pieza"
-                    content=""
-                    open={showNewDialog}
-                    close={handleCloseDialog}
-                    lazyMount
-                    placement="center"
-                    motionPreset="slide-in-bottom"
-                />
-                <Button
-                    className="dialog-button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={setShowNewDialog}>
-                    Añadir pieza
-                </Button>
-                <TabComponent
-                    tabContent={tabData}
-                    defaultValue={"all"}
-                    dataFromChild={handleWorkshopChange}
-                />
-                <div className="grid-container">
-                    {contentDataFiltered.map((data, index) => (
-                        <CardComponentImage
-                            className="card"
-                            onClick={() => handleOnClickCard(data, index)}
-                            key={index}
-                            title={data.title}
-                            image={data.image}
-                            description={data.description}
-                            footer={data.brand}
-                        />
-                    ))}
-                </div>
-                <DialogComponent
-                    size="cover"
-                    title="Detalles de la pieza"
-                    content={
-                        selectedCardData && (
-                            <DetailsDialog data={selectedCardData} />
-                        )
-                    }
-                    open={showDetailsDialog}
-                    close={handleCloseDialog}
-                    lazyMount
-                    placement="center"
-                    motionPreset="slide-in-bottom"
-                />
+        <div className="container">
+            <DialogComponent
+                size="xl"
+                title="Añadir pieza"
+                content={<NewPiece handleCancel={handleCloseDialog} />}
+                open={showNewDialog}
+                close={handleCloseDialog}
+                lazyMount
+                placement="center"
+                motionPreset="slide-in-bottom"
+            />
+            <Button
+                className="dialog-button"
+                variant="ghost"
+                size="sm"
+                onClick={setShowNewDialog}>
+                Añadir pieza
+            </Button>
+            <TabComponent
+                tabContent={tabData}
+                defaultValue={"all"}
+                dataFromChild={handleWorkshopChange}
+            />
+            <div className="grid-container">
+                {contentDataFiltered.map((data, index) => (
+                    <CardComponentImage
+                        className="card"
+                        onClick={() => handleOnClickCard(data, index)}
+                        key={index}
+                        title={data.title}
+                        image={data.image}
+                        description={data.description}
+                        footer={data.brand}
+                    />
+                ))}
             </div>
-        </>
+            <DialogComponent
+                size="cover"
+                title="Detalles de la pieza"
+                content={
+                    selectedCardData && (
+                        <DetailsDialog data={selectedCardData} />
+                    )
+                }
+                open={showDetailsDialog}
+                close={handleCloseDialog}
+                lazyMount
+                placement="center"
+                motionPreset="slide-in-bottom"
+            />
+        </div>
     );
 }
 

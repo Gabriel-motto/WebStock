@@ -20,6 +20,7 @@
       "castrogusttavo.symbols"
       "esbenp.prettier-vscode"
       "ms-vscode.js-debug"
+      "WallabyJs.console-ninja"
     ];
     workspace = {
       # Runs when a workspace is first created with this `dev.nix` file

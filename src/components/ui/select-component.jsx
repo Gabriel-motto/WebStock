@@ -11,9 +11,9 @@ export function SelectComponent({ values, dataFromChild, ...props }) {
             <option value="">Selecciona una opción</option>
             {values.map((value) => (
                 <option
-                    key={value}
-                    value={value}>
-                    {value}
+                    key={value.id}
+                    value={value.name}>
+                    {value.name}
                 </option>
             ))}
         </select>
