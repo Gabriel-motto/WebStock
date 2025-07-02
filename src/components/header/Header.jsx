@@ -1,4 +1,4 @@
-import "./header-component.css";
+import "./Header.css";
 import { useState } from "react";
 import { IoPersonOutline } from "react-icons/io5";
 import {

@@ -19,3 +19,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     transform-style: preserve-3d;
 }
+
+.loader {
+    margin: 0 auto;
+}

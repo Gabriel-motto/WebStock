@@ -6,8 +6,8 @@ export const EVENTS = {
 
 
 import HomePage from "../pages/Home.jsx";
-import MachinesPage from "../pages/Machines.jsx";
-import PiecesPage from "../pages/Pieces.jsx";
+import MachinesPage from "../pages/Machines/Machines.jsx";
+import PiecesPage from "../pages/Pieces/Pieces.jsx";
 import SummaryPage from "../pages/Summary.jsx";
 export const ROUTES = [
     {

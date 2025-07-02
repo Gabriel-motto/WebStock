@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import {
     Button,
     Image,
@@ -9,52 +9,12 @@ import {
     Field,
     Input,
     ButtonGroup,
+    Spinner,
 } from "@chakra-ui/react";
-import { TabComponent } from "../components/ui/tab-component.jsx";
-import DialogComponent from "../components/dialog/dialog-component.jsx";
-import { CardComponentImage } from "../components/card/card-component.jsx";
+import supabase from "../../utils/supabase";
+import { TabComponent } from "../../components/ui/tab-component.jsx";
+import DialogComponent from "../../components/dialog/Dialog.jsx";
 import "./Pieces.css";
-
-const dataPieces = [
-    {
-        title: "6FC 5357-0BB33-0AE0",
-        description:
-            "840D/DE NCU 573.2 5 ACHSEN/SPINDELN MAX. 31 SPEICHER NC 1,5MB PLC 64KB (MAX. 288KB), 8MB BIS 32MB D-RAM, STANDARD ODER",
-        image: "assets/GNK_logo_azul.png",
-        brand: "Siemens",
-        workshop: "mechanics",
-    },
-    {
-        title: "6FC 5270-5BX30-3AH0",
-        description: "SOFTWARE NCU 573.2",
-        image: "assets/GNK_logo_azul.png",
-        brand: "Siemens",
-        workshop: "mechanics",
-    },
-    {
-        title: "6FC 5252-0AD00-0AA0",
-        description:
-            "SINUMERIK 810D/840D I/O connection via PROFIBUS DP, software option only Certificate of License",
-        image: "assets/GNK_logo_azul.png",
-        brand: "Siemens",
-        workshop: "mechanics",
-    },
-    {
-        title: "6FC 5252-0AX21-0AB0",
-        description: '840D-TOOLBOX, DISK 3,5" LICENCIA',
-        image: "assets/GNK_logo_azul.png",
-        brand: "Siemens",
-        workshop: "electronics",
-    },
-    {
-        title: "6ES 7153-1AA03-0XB0",
-        description:
-            "IM 153-1 ET 200M PERIFERIA DESCENTRALIZADA FUER MAXIMAL 8 S7-300 BAUGRUPPEN",
-        image: "assets/GNK_logo_azul.png",
-        brand: "Siemens",
-        workshop: "electronics",
-    },
-];
 
 const tabData = [
     {
@@ -77,15 +37,15 @@ function DetailsDialog({ data }) {
             <div className="container-box">
                 <Image
                     className="image-dialog"
-                    src={data.image}
-                    alt={`Producto con referencia: ${data.title}`}
+                    src={"assets/GNK_logo_azul.png"}
+                    alt={`Producto con referencia: ${data.name}`}
                 />
                 <div className="content-box">
                     <div className="title-dialog">
                         <Text
                             fontWeight="medium"
                             color="fg">
-                            {data.title}
+                            {data.name}
                         </Text>
                         <Text
                             fontWeight="medium"
@@ -99,15 +59,17 @@ function DetailsDialog({ data }) {
                         letterSpacing="wide">
                         {data.description}
                     </Text>
-                    <Badge
-                        colorPalette="teal"
-                        variant="solid"
-                        className="workshop-badge"
-                        size="lg">
-                        {data.workshop === "mechanics"
-                            ? "Mecánica"
-                            : "Electrónica"}
-                    </Badge>
+                    {data.workshop !== null && (
+                        <Badge
+                            colorPalette="teal"
+                            variant="solid"
+                            className="workshop-badge"
+                            size="lg">
+                            {data.workshop === "mechanics"
+                                ? "Mecánica"
+                                : "Electrónica"}
+                        </Badge>
+                    )}
                 </div>
             </div>
             <Separator
@@ -118,7 +80,7 @@ function DetailsDialog({ data }) {
     );
 }
 
-function handleSubmit(formData) {
+function handleSubmit({ formData }) {
     const data = formData;
     console.log(
         formData.get("name") +
@@ -249,11 +211,23 @@ function NewPiece({ handleCancel }) {
     );
 }
 
+const CardComponent = lazy(() => import("../../components/card/Card.jsx"));
+
 function PiecesPage() {
     const [workshop, setWorkshop] = useState({ value: "all" });
+    const [pieces, setPieces] = useState([]);
+    const [filteredPieces, setFilteredPieces] = useState([]);
     const [showNewDialog, setShowNewDialog] = useState(false);
     const [showDetailsDialog, setShowDetailsDialog] = useState(false);
     const [selectedCardData, setSelectedCardData] = useState();
+
+    useEffect(() => {
+        async function getPieces() {
+            const { data: pieces } = await supabase.from("Pieces").select();
+            setPieces(pieces);
+        }
+        getPieces();
+    }, []);
 
     const handleCloseDialog = () => {
         setShowNewDialog(false);
@@ -264,18 +238,18 @@ function PiecesPage() {
         setWorkshop(value);
     };
 
-    const handleOnClickCard = (data, index) => {
+    const handleOnClickCard = (data) => {
         setSelectedCardData(data);
         setShowDetailsDialog(true);
-        console.log(index);
     };
 
-    let contentDataFiltered = dataPieces;
-    if (workshop.value !== "all") {
-        contentDataFiltered = dataPieces.filter(
-            (content) => content.workshop === workshop.value
-        );
-    }
+    useEffect(() => {
+        workshop.value === "all"
+            ? setFilteredPieces(pieces)
+            : setFilteredPieces(
+                  pieces.filter((piece) => piece.workshop === workshop.value)
+              );
+    }, [pieces]);
 
     return (
         <div className="container">
@@ -301,19 +275,22 @@ function PiecesPage() {
                 defaultValue={"all"}
                 dataFromChild={handleWorkshopChange}
             />
-            <div className="grid-container">
-                {contentDataFiltered.map((data, index) => (
-                    <CardComponentImage
-                        className="card"
-                        onClick={() => handleOnClickCard(data, index)}
-                        key={index}
-                        title={data.title}
-                        image={data.image}
-                        description={data.description}
-                        footer={data.brand}
-                    />
-                ))}
-            </div>
+            <Suspense fallback={<Spinner />}>
+                <div className="grid-container">
+                    {filteredPieces.map((piece, index) => (
+                        <CardComponent
+                            className="card"
+                            onClick={() => handleOnClickCard(piece)}
+                            key={index}
+                            title={piece.name}
+                            image="assets/GNK_logo_azul.png"
+                            description={piece.description}
+                            footer={piece.brand}
+                            haveImage
+                        />
+                    ))}
+                </div>
+            </Suspense>
             <DialogComponent
                 size="cover"
                 title="Detalles de la pieza"

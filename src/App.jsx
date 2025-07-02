@@ -1,6 +1,6 @@
 import "./App.css";
-import Header from "./components/header/header-component.jsx";
-import Sidebar from "./components/sidebar/sidebar-component.jsx";
+import Header from "./components/header/Header.jsx";
+import Sidebar from "./components/sidebar/Sidebar.jsx";
 import Router from "./Router.jsx";
 import { ROUTES } from "./utils/consts";
 import { Analytics } from '@vercel/analytics/react';

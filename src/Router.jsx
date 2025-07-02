@@ -11,12 +11,12 @@ export default function Router ({ routes= [], defaultComponent: DefaultComponent
             setCurrentPath(window.location.pathname)
         }
 
-        window.addEventListener(EVENTS.POPSTATE, onLocationChange)
         window.addEventListener(EVENTS.PUSHSTATE, onLocationChange)
+        window.addEventListener(EVENTS.POPSTATE, onLocationChange)
 
         return () => {
-            window.removeEventListener(EVENTS.POPSTATE, onLocationChange)
             window.removeEventListener(EVENTS.PUSHSTATE, onLocationChange)
+            window.removeEventListener(EVENTS.POPSTATE, onLocationChange)
         }
     }, [])
 

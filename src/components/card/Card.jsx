@@ -1,7 +1,7 @@
 import { Card, Button, Image, Text } from "@chakra-ui/react";
-import "./card-component.css";
+import "./Card.css";
 
-export function CardComponent({ title, description, footer, ...props }) {
+export function CardText({ title, description, footer, ...props }) {
     return (
         <Card.Root
             className="content-card"
@@ -29,7 +29,7 @@ export function CardComponent({ title, description, footer, ...props }) {
     );
 }
 
-export function CardComponentImage({
+export function CardImage({
     title,
     image,
     description,
@@ -70,4 +70,23 @@ export function CardComponentImage({
             </Card.Footer>
         </Card.Root>
     );
+}
+
+export default function CardComponent({ haveImage, image, title, description, footer, ...props }) {
+    return haveImage ? (
+        <CardImage
+            title={title}
+            image={image}
+            description={description}
+            footer={footer}
+            {...props}
+        />
+    ) : (
+        <CardText
+            title={title}
+            description={description}
+            footer={footer}
+            {...props}
+        />
+    )
 }
