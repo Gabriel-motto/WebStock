@@ -1,0 +1,9 @@
+.machine-related-content {
+    display: flex;
+    margin-top: 20px;
+}
+
+.title {
+    font-size: x-large;
+    font-weight: bolder;
+}

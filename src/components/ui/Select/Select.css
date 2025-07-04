@@ -78,7 +78,7 @@
 
 .grid-item-filter {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 150px));
+    grid-template-columns: repeat(auto-fit, minmax(75px, 100px));
     gap: 5px;
     justify-content: center;
     width: 100%;

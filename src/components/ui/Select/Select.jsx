@@ -13,9 +13,12 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useClickAway } from "@uidotdev/usehooks";
+import { useAssemblyLines } from "@/hooks/useALine";
 
-export function Select({ values, dataFromChild, ...props }) {
+export function SelectAssemblyLine({ dataFromChild, ...props }) {
     const [selectedValues, setSelectedValues] = useState([]);
+    const [search, setSearch] = useState("");
+    const assemblyLines = useAssemblyLines(search);
 
     const addSelectedValues = (newValue) => {
         setSelectedValues((prevValues) => [...prevValues, newValue]);
@@ -25,40 +28,6 @@ export function Select({ values, dataFromChild, ...props }) {
         setSelectedValues((prevValues) =>
             prevValues.filter((value) => value !== valueToRemove)
         );
-    };
-
-    // Filter values based on search input
-    const handleSearch = (value) => {
-        const filteredValues = values.filter((item) =>
-            item.name.toLowerCase().includes(value.toLowerCase())
-        );
-        const options = document.querySelector(".options");
-
-        // Clear current options except the search input
-        Array.from(options.children).forEach((child) => {
-            if (!child.classList.contains("search-input-group")) {
-                child.remove();
-            }
-        });
-
-        // Add filtered options in div components
-        if (filteredValues.length > 0) {
-            filteredValues.forEach((item) => {
-                const div = document.createElement("div");
-                div.classList.add("item");
-                div.innerText = item.name;
-                div.addEventListener("click", () =>
-                    handleSelectClick(item.name)
-                );
-                options.appendChild(div);
-            });
-        } else {
-            // If no results, add a message
-            const noResultsDiv = document.createElement("div");
-            noResultsDiv.classList.add("item");
-            noResultsDiv.innerText = "No hay resultados";
-            options.appendChild(noResultsDiv);
-        }
     };
 
     // Opens select menu
@@ -90,7 +59,7 @@ export function Select({ values, dataFromChild, ...props }) {
     const SelectList = () => {
         return (
             <>
-                {values.map((value, index) => (
+                {assemblyLines.map((value, index) => (
                     <div
                         className="item"
                         onClick={() => handleSelectClick(value.name)}
@@ -132,7 +101,7 @@ export function Select({ values, dataFromChild, ...props }) {
                             className="search-input"
                             placeholder="Buscar..."
                             variant="flushed"
-                            onChange={(e) => handleSearch(e.target.value)}
+                            onChange={(e) => setSearch(e.target.value)}
                         />
                     </InputGroup>
                     <SelectList />
@@ -142,6 +111,7 @@ export function Select({ values, dataFromChild, ...props }) {
                 {selectedValues.length > 0
                     ? selectedValues.map((value) => (
                           <div
+                              key={value}
                               className="item-filter"
                               onClick={() => handleFilterClose(value)}>
                               <Text truncate>{value}</Text>

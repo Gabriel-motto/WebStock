@@ -23,3 +23,21 @@
 .loader {
     margin: 0 auto;
 }
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-input-machines {
+    width: 30%;
+}
+
+.search-machines {
+    width: 100%;
+}
+
+SelectAssemblyLine {
+    width: 70%;
+}

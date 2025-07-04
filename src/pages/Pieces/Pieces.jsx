@@ -14,6 +14,7 @@ import {
 import supabase from "../../utils/supabase";
 import { TabComponent } from "../../components/ui/tab-component.jsx";
 import DialogComponent from "../../components/dialog/Dialog.jsx";
+import { usePieces, useSelectedPiece } from "../../hooks/usePieces";
 import "./Pieces.css";
 
 const tabData = [
@@ -22,11 +23,11 @@ const tabData = [
         title: "Todas",
     },
     {
-        id: "mechanics",
+        id: "Mecánica",
         title: "Mecánica",
     },
     {
-        id: "electronics",
+        id: "Electrónica",
         title: "Electrónica",
     },
 ];
@@ -80,47 +81,28 @@ function DetailsDialog({ data }) {
     );
 }
 
-function handleSubmit({ formData }) {
-    const data = formData;
-    console.log(
-        formData.get("name") +
-            " " +
-            formData.get("type") +
-            " " +
-            formData.get("brand") +
-            " " +
-            formData.get("description") +
-            " " +
-            formData.get("workshop") +
-            " " +
-            formData.get("amount") +
-            " " +
-            formData.get("location") +
-            " " +
-            formData.get("machine")
-    );
-
+function NewPiece({ handleCancel }) {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const formData = Object.fromEntries(new FormData(event.target));
+        console.log(formData);
+    };
     // useEffect(() => {
     //     async function insertPiece() {
     //         const { data, error } = await supabase
     //             .from("Pieces")
     //             .insert([{
     //                 name: formData.get("name"),
+    //                 description: formData.get("description"),
     //                 type: formData.get("type"),
     //                 brand: formData.get("brand"),
-    //                 description: formData.get("description"),
     //                 workshop: formData.get("workshop"),
-    //                 amount: formData.get("amount"),
-    //                 location: formData.get("location"),
-    //                 machine: formData.get("machine"),
     //             }])
     //             .select()
     //     }
     //     insertPiece();
     // }, []);
-}
 
-function NewPiece({ handleCancel }) {
     return (
         <form action={handleSubmit}>
             <Fieldset.Root>
@@ -214,20 +196,13 @@ function NewPiece({ handleCancel }) {
 const CardComponent = lazy(() => import("../../components/card/Card.jsx"));
 
 function PiecesPage() {
-    const [workshop, setWorkshop] = useState({ value: "all" });
-    const [pieces, setPieces] = useState([]);
-    const [filteredPieces, setFilteredPieces] = useState([]);
+    const [workshop, setWorkshop] = useState({value: "all"});
+    const [search, setSearch] = useState("");
     const [showNewDialog, setShowNewDialog] = useState(false);
     const [showDetailsDialog, setShowDetailsDialog] = useState(false);
-    const [selectedCardData, setSelectedCardData] = useState();
-
-    useEffect(() => {
-        async function getPieces() {
-            const { data: pieces } = await supabase.from("Pieces").select();
-            setPieces(pieces);
-        }
-        getPieces();
-    }, []);
+    const [selectedCardData, setSelectedCardData] = useState([]);
+    const pieces = usePieces(workshop.value, search);
+    const selectedPiece = useSelectedPiece(selectedCardData.name);
 
     const handleCloseDialog = () => {
         setShowNewDialog(false);
@@ -242,14 +217,6 @@ function PiecesPage() {
         setSelectedCardData(data);
         setShowDetailsDialog(true);
     };
-
-    useEffect(() => {
-        workshop.value === "all"
-            ? setFilteredPieces(pieces)
-            : setFilteredPieces(
-                  pieces.filter((piece) => piece.workshop === workshop.value)
-              );
-    }, [pieces]);
 
     return (
         <div className="container">
@@ -277,7 +244,7 @@ function PiecesPage() {
             />
             <Suspense fallback={<Spinner />}>
                 <div className="grid-container">
-                    {filteredPieces.map((piece, index) => (
+                    {pieces.map((piece, index) => (
                         <CardComponent
                             className="card"
                             onClick={() => handleOnClickCard(piece)}
