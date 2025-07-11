@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, useRef } from "react";
 import {
     Button,
     Image,
@@ -10,12 +10,16 @@ import {
     Input,
     ButtonGroup,
     Spinner,
+    InputGroup,
+    CloseButton,
 } from "@chakra-ui/react";
-import supabase from "../../utils/supabase";
 import { TabComponent } from "../../components/ui/tab-component.jsx";
 import DialogComponent from "../../components/dialog/Dialog.jsx";
 import { usePieces, useSelectedPiece } from "../../hooks/usePieces";
 import "./Pieces.css";
+import PaginationControls from "@/components/ui/Pagination/Pagination";
+import { IoSearch } from "react-icons/io5";
+import { useDebounce } from "@uidotdev/usehooks";
 
 const tabData = [
     {
@@ -196,13 +200,29 @@ function NewPiece({ handleCancel }) {
 const CardComponent = lazy(() => import("../../components/card/Card.jsx"));
 
 function PiecesPage() {
-    const [workshop, setWorkshop] = useState({value: "all"});
+    const [workshop, setWorkshop] = useState({ value: "all" });
     const [search, setSearch] = useState("");
     const [showNewDialog, setShowNewDialog] = useState(false);
     const [showDetailsDialog, setShowDetailsDialog] = useState(false);
     const [selectedCardData, setSelectedCardData] = useState([]);
-    const pieces = usePieces(workshop.value, search);
-    const selectedPiece = useSelectedPiece(selectedCardData.name);
+    const debouncedSearch = useDebounce(search, 300);
+    const pieces = usePieces({ workshop: workshop.value, search: search, debouncedSearch: debouncedSearch});
+    
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const siblings = 2; // Número de páginas antes y después de la actual
+    const totalPages = Math.ceil(pieces.length / pageSize);
+
+    // Si cambias páginaSize resetea a 1
+    const handleSizeChange = (size) => {
+        setPageSize(size);
+        setCurrentPage(1);
+    };
+
+    // Define slice
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const pagedPieces = pieces.slice(start, end);
 
     const handleCloseDialog = () => {
         setShowNewDialog(false);
@@ -218,6 +238,24 @@ function PiecesPage() {
         setShowDetailsDialog(true);
     };
 
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const inputRef = (useRef < HTMLInputElement) | (null > null);
+
+    const endElement = search ? (
+        <CloseButton
+            size="xs"
+            onClick={() => {
+                setSearch("");
+                inputRef.current?.focus();
+            }}
+            me="-2"
+        />
+    ) : null;
+
     return (
         <div className="container">
             <DialogComponent
@@ -230,21 +268,34 @@ function PiecesPage() {
                 placement="center"
                 motionPreset="slide-in-bottom"
             />
-            <Button
-                className="dialog-button"
-                variant="ghost"
-                size="sm"
-                onClick={setShowNewDialog}>
-                Añadir pieza
-            </Button>
-            <TabComponent
-                tabContent={tabData}
-                defaultValue={"all"}
-                dataFromChild={handleWorkshopChange}
-            />
+            <div className="inner-header">
+                <TabComponent
+                    tabContent={tabData}
+                    defaultValue={"all"}
+                    dataFromChild={handleWorkshopChange}
+                />
+                <InputGroup
+                    startElement={<IoSearch className="search-icon" />}
+                    endElement={endElement}>
+                    <Input
+                        className="search-machines"
+                        placeholder="Buscar..."
+                        variant="flushed"
+                        value={search}
+                        onChange={handleSearch}
+                    />
+                </InputGroup>
+                <Button
+                    className="dialog-button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={setShowNewDialog}>
+                    Añadir pieza
+                </Button>
+            </div>
             <Suspense fallback={<Spinner />}>
                 <div className="grid-container">
-                    {pieces.map((piece, index) => (
+                    {pagedPieces?.map((piece, index) => (
                         <CardComponent
                             className="card"
                             onClick={() => handleOnClickCard(piece)}
@@ -257,6 +308,14 @@ function PiecesPage() {
                         />
                     ))}
                 </div>
+                <PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    onPageChange={setCurrentPage}
+                    onPageSizeChange={handleSizeChange}
+                    siblingCount={siblings}
+                />
             </Suspense>
             <DialogComponent
                 size="cover"

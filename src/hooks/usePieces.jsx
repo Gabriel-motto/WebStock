@@ -6,12 +6,23 @@ import {
 } from "../services/pieces";
 import { getPiecesFromMachines } from "../services/machines";
 
-export function usePieces(workshop, search) {
+export function usePieces(options = {}) {
+    const {
+        workshop = "all",
+        search = "",
+        multiple = [],
+        debouncedSearch,
+    } = options;
     const [pieces, setPieces] = useState([]);
 
     useEffect(() => {
-        getPieces(workshop, search).then(setPieces);
-    }, [workshop, search]);
+        getPieces(workshop, search, multiple).then(setPieces);
+        console.log("a")
+    }, [
+        workshop,
+        debouncedSearch,
+        JSON.stringify(multiple)
+    ]);
 
     return pieces;
 }
@@ -27,12 +38,14 @@ export function useSelectedPiece(piece) {
         getPiecesFromMachines(piece).then(setMachine);
         getPiecesFromWarehouse(piece).then(setWarehouse);
         setDetailData({
-            pieces: piece,
+            piece: piece,
             stock: stock,
             machine: machine,
             warehouse: warehouse,
         });
-        console.log(piece + " - " + stock + " - " + machine + " - " + warehouse)
+        console.log(
+            piece + " - " + stock + " - " + machine + " - " + warehouse
+        );
     }, [piece]);
 
     return detailData;

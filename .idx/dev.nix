@@ -21,6 +21,10 @@
       "esbenp.prettier-vscode"
       "ms-vscode.js-debug"
       "WallabyJs.console-ninja"
+      "bradlc.vscode-tailwindcss"
+      "formulahendry.auto-rename-tag"
+      "WallabyJs.quokka-vscode"
+      "WallabyJs.wallaby-vscode"
     ];
     workspace = {
       # Runs when a workspace is first created with this `dev.nix` file

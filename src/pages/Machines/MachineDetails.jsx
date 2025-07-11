@@ -1,38 +1,68 @@
 import "./MachineDetails.css";
-import { Separator } from "@chakra-ui/react";
+import { Separator, Table } from "@chakra-ui/react";
 import { useSelectedMachine } from "@/hooks/useMachines";
 import { usePieces } from "@/hooks/usePieces";
+import { useState, useMemo } from "react";
+import PaginationControls from "@/components/ui/Pagination/Pagination.jsx";
 
-function PieceInfo({ piece }) {
-    const pieceDetails = usePieces("all", piece.piece);
+function PieceInfoTable({ pieces }) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const siblings = 2; // Número de páginas antes y después de la actual
+
+    // Recalcula cuando cambien props
+    const refs = useMemo(() => pieces.map((p) => p.piece), [pieces]);
+    const details = usePieces({ multiple: refs });
+
+    const totalPages = Math.ceil(pieces.length / pageSize);
+
+    // Si cambias páginaSize resetea a 1
+    const handleSizeChange = (size) => {
+        setPageSize(size);
+        setCurrentPage(1);
+    };
+
+    // Define slice
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const pageDetails = details.slice(start, end);
+    const pageAmounts = pieces.slice(start, end).map((p) => p.amount);
 
     return (
         <>
-            {pieceDetails.map((pieceInfo, index) => (
-                <div
-                    key={index}
-                    className="piece-info-container">
-                    <div
-                        key={pieceInfo.name}
-                        className="piece-name">
-                        {pieceInfo.name}
-                    </div>
-                    {pieceInfo.description ? (
-                        <div
-                            key={pieceInfo.description}
-                            className="piece-description">
-                            {pieceInfo.description}
-                        </div>
-                    ) : (
-                        <p>Sin descripción</p>
-                    )}
-                    <div
-                        key={piece.amount}
-                        className="piece-amount">
-                        {piece.amount}
-                    </div>
-                </div>
-            ))}
+            <Table.Root>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.ColumnHeader>Referencia</Table.ColumnHeader>
+                        <Table.ColumnHeader>Descripción</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="end">
+                            Cantidad
+                        </Table.ColumnHeader>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {pageDetails.map((piece, idx) => (
+                        <Table.Row key={piece.id}>
+                            <Table.Cell>{piece.name}</Table.Cell>
+                            <Table.Cell>
+                                {piece.description || "Sin descripción"}
+                            </Table.Cell>
+                            <Table.Cell textAlign="end">
+                                {pageAmounts[idx]}
+                            </Table.Cell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table.Root>
+
+            <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={handleSizeChange}
+                siblingCount={siblings}
+            />
         </>
     );
 }
@@ -56,13 +86,7 @@ export default function MachineDetails({ data }) {
             </div>
             <div className="piece-related-content">
                 <div className="title">Piezas en la máquina</div>
-                {pieces?.map((piece) => (
-                    <PieceInfo
-                        className="piece-info"
-                        key={piece.piece}
-                        piece={piece}
-                    />
-                ))}
+                <PieceInfoTable pieces={pieces} />
                 <div className="additional-content"></div>
             </div>
             <div className="footer"></div>

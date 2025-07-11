@@ -7,3 +7,14 @@
     font-size: x-large;
     font-weight: bolder;
 }
+
+.piece-related-body {
+    display: grid;
+    grid-template-columns: min-content;
+    gap: 5px;
+}
+
+.piece-info-container {
+    display: flex;
+    gap: 5px;
+}

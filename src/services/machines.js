@@ -1,6 +1,5 @@
 import supabase from "../utils/supabase";
 
-
 export async function getMachines(selectedALines, search) {
     let query = supabase.from("Machines").select();
 
@@ -11,7 +10,7 @@ export async function getMachines(selectedALines, search) {
     if (search) {
         query = query.ilike("name", `%${search}%`);
     }
-    
+
     const { data: machines } = await query;
     return machines?.map((machine) => ({
         id: machine.id,
@@ -22,6 +21,9 @@ export async function getMachines(selectedALines, search) {
 }
 
 export async function getPiecesFromMachines(machine) {
-    const { data: pieces } = await supabase.from("machine_pieces").select().eq("machine", machine);
+    const { data: pieces } = await supabase
+        .from("machine_pieces")
+        .select()
+        .eq("machine", machine);
     return pieces;
 }
