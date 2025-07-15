@@ -1,9 +1,21 @@
 import "./MachineDetails.css";
-import { Separator, Table } from "@chakra-ui/react";
+import { Separator, Table, Text } from "@chakra-ui/react";
 import { useSelectedMachine } from "@/hooks/useMachines";
 import { usePieces } from "@/hooks/usePieces";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import PaginationControls from "@/components/ui/Pagination/Pagination.jsx";
+import { TabComponent } from "@/components/ui/tab-component";
+
+const tabData = [
+    {
+        id: "summary",
+        title: "Máquina",
+    },
+    {
+        id: "pieces",
+        title: "Piezas",
+    },
+];
 
 function PieceInfoTable({ pieces }) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +60,7 @@ function PieceInfoTable({ pieces }) {
                                 {piece.description || "Sin descripción"}
                             </Table.Cell>
                             <Table.Cell textAlign="end">
-                                {pageAmounts[idx]}
+                                <Text textStyle="xl">{pageAmounts[idx]}</Text>
                             </Table.Cell>
                         </Table.Row>
                     ))}
@@ -68,28 +80,44 @@ function PieceInfoTable({ pieces }) {
 }
 
 export default function MachineDetails({ data }) {
+    const [selectedTab, setSelectedTab] = useState("summary");
     const pieces = useSelectedMachine(data.name);
 
+    const handleTabChange = (e) => {
+        setSelectedTab(e.value);
+    };
+
     return (
-        <main className="container">
-            <div className="machine-related-content">
-                <div className="title">{data.name}</div>
-                <Separator
-                    orientation="vertical"
-                    size="md"
-                />
-                <div className="body">
-                    <div className="description">{data.description}</div>
-                    <div className="assembly-line">{data.aLine}</div>
-                    <div className="additional-content"></div>
-                </div>
-            </div>
-            <div className="piece-related-content">
-                <div className="title">Piezas en la máquina</div>
-                <PieceInfoTable pieces={pieces} />
-                <div className="additional-content"></div>
-            </div>
-            <div className="footer"></div>
-        </main>
+        <>
+            <TabComponent
+                tabContent={tabData}
+                defaultValue={"summary"}
+                dataFromChild={handleTabChange}
+            />
+            <main className="container">
+                {selectedTab === "summary" ? (
+                    <div className="machine-related-content">
+                        <div className="title">{data.name}</div>
+                        <Separator
+                            orientation="vertical"
+                            size="md"
+                        />
+                        <div className="body">
+                            <div className="description">
+                                {data.description}
+                            </div>
+                            <div className="assembly-line">{data.aLine}</div>
+                            <div className="additional-content"></div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="piece-related-content">
+                        <div className="title">Piezas en la máquina</div>
+                        <PieceInfoTable pieces={pieces} />
+                        <div className="additional-content"></div>
+                    </div>
+                )}
+            </main>
+        </>
     );
 }

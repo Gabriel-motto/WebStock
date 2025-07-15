@@ -17,6 +17,7 @@ import { TabComponent } from "../../components/ui/tab-component.jsx";
 import DialogComponent from "../../components/dialog/Dialog.jsx";
 import { usePieces, useSelectedPiece } from "../../hooks/usePieces";
 import "./Pieces.css";
+import PiecesDialog from "./PiecesDetails.jsx";
 import PaginationControls from "@/components/ui/Pagination/Pagination";
 import { IoSearch } from "react-icons/io5";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -35,55 +36,6 @@ const tabData = [
         title: "Electrónica",
     },
 ];
-
-function DetailsDialog({ data }) {
-    return (
-        <>
-            <div className="container-box">
-                <Image
-                    className="image-dialog"
-                    src={"assets/GNK_logo_azul.png"}
-                    alt={`Producto con referencia: ${data.name}`}
-                />
-                <div className="content-box">
-                    <div className="title-dialog">
-                        <Text
-                            fontWeight="medium"
-                            color="fg">
-                            {data.name}
-                        </Text>
-                        <Text
-                            fontWeight="medium"
-                            color="fg.muted">
-                            {data.brand}
-                        </Text>
-                    </div>
-                    <Text
-                        className="description-box"
-                        fontSize="18px"
-                        letterSpacing="wide">
-                        {data.description}
-                    </Text>
-                    {data.workshop !== null && (
-                        <Badge
-                            colorPalette="teal"
-                            variant="solid"
-                            className="workshop-badge"
-                            size="lg">
-                            {data.workshop === "mechanics"
-                                ? "Mecánica"
-                                : "Electrónica"}
-                        </Badge>
-                    )}
-                </div>
-            </div>
-            <Separator
-                className="separator-dialog"
-                size="md"
-            />
-        </>
-    );
-}
 
 function NewPiece({ handleCancel }) {
     const handleSubmit = (event) => {
@@ -322,7 +274,7 @@ function PiecesPage() {
                 title="Detalles de la pieza"
                 content={
                     selectedCardData && (
-                        <DetailsDialog data={selectedCardData} />
+                        <PiecesDialog data={selectedCardData} />
                     )
                 }
                 open={showDetailsDialog}

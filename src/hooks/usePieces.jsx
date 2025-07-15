@@ -17,7 +17,6 @@ export function usePieces(options = {}) {
 
     useEffect(() => {
         getPieces(workshop, search, multiple).then(setPieces);
-        console.log("a")
     }, [
         workshop,
         debouncedSearch,

@@ -1,6 +1,7 @@
 .machine-related-content {
     display: flex;
     margin-top: 20px;
+    gap: 1em;
 }
 
 .title {
@@ -17,4 +18,11 @@
 .piece-info-container {
     display: flex;
     gap: 5px;
+}
+
+.piece-related-content {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
