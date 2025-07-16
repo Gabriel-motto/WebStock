@@ -10,3 +10,15 @@
     display: flex;
     gap: .5rem;
 }
+
+@media screen and (max-width: 768px) {
+    .pagination-size-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .page-size-selector {
+        align-self: flex-start;
+    }
+}

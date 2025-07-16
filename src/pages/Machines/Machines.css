@@ -2,10 +2,6 @@
     padding-top: 20px;
 }
 
-.loader {
-    margin: 0 auto;
-}
-
 .search-bar {
     display: flex;
     align-items: center;
@@ -22,4 +18,26 @@
 
 SelectAssemblyLine {
     width: 70%;
+}
+
+.fallback {
+    display: "flex";
+    justify-content: "center";
+    align-Items: "center";
+    height: "100vh";
+    width: "100vw";
+}
+
+@media screen and (max-width: 768px) {
+    .search-bar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column-reverse;
+        gap: 5px;
+    }
+    .search-input-machines {
+        width: 100%;
+        max-width: 250px;
+    }
 }

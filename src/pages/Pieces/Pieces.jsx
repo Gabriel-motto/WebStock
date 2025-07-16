@@ -21,6 +21,7 @@ import PiecesDialog from "./PiecesDetails.jsx";
 import PaginationControls from "@/components/ui/Pagination/Pagination";
 import { IoSearch } from "react-icons/io5";
 import { useDebounce } from "@uidotdev/usehooks";
+import { EmptyError } from "@/components/ui/EmptyStates.jsx";
 
 const tabData = [
     {
@@ -130,17 +131,20 @@ function NewPiece({ handleCancel }) {
 
                 <ButtonGroup
                     variant="outline"
-                    className="buttons-form">
+                    className="buttons-form"
+                >
                     <Button
                         className="btn btn-add"
                         colorPalette="blue"
-                        type="submit">
+                        type="submit"
+                    >
                         Añadir
                     </Button>
                     <Button
                         className="btn btn-cancel"
                         colorPalette="red"
-                        onClick={handleCancel}>
+                        onClick={handleCancel}
+                    >
                         Cancelar
                     </Button>
                 </ButtonGroup>
@@ -158,8 +162,12 @@ function PiecesPage() {
     const [showDetailsDialog, setShowDetailsDialog] = useState(false);
     const [selectedCardData, setSelectedCardData] = useState([]);
     const debouncedSearch = useDebounce(search, 300);
-    const pieces = usePieces({ workshop: workshop.value, search: search, debouncedSearch: debouncedSearch});
-    
+    const pieces = usePieces({
+        workshop: workshop.value,
+        search: search,
+        debouncedSearch: debouncedSearch,
+    });
+
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const siblings = 2; // Número de páginas antes y después de la actual
@@ -228,7 +236,8 @@ function PiecesPage() {
                 />
                 <InputGroup
                     startElement={<IoSearch className="search-icon" />}
-                    endElement={endElement}>
+                    endElement={endElement}
+                >
                     <Input
                         className="search-machines"
                         placeholder="Buscar..."
@@ -241,41 +250,44 @@ function PiecesPage() {
                     className="dialog-button"
                     variant="ghost"
                     size="sm"
-                    onClick={setShowNewDialog}>
+                    onClick={setShowNewDialog}
+                >
                     Añadir pieza
                 </Button>
             </div>
-            <Suspense fallback={<Spinner />}>
-                <div className="grid-container">
-                    {pagedPieces?.map((piece, index) => (
-                        <CardComponent
-                            className="card"
-                            onClick={() => handleOnClickCard(piece)}
-                            key={index}
-                            title={piece.name}
-                            image="assets/GNK_logo_azul.png"
-                            description={piece.description}
-                            footer={piece.brand}
-                            haveImage
-                        />
-                    ))}
-                </div>
-                <PaginationControls
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    pageSize={pageSize}
-                    onPageChange={setCurrentPage}
-                    onPageSizeChange={handleSizeChange}
-                    siblingCount={siblings}
-                />
-            </Suspense>
+            {totalPages !== 0 ? (
+                <Suspense fallback={<Spinner />}>
+                    <div className="grid-container">
+                        {pagedPieces?.map((piece, index) => (
+                            <CardComponent
+                                className="card"
+                                onClick={() => handleOnClickCard(piece)}
+                                key={index}
+                                title={piece.name}
+                                image="assets/GNK_logo_azul.png"
+                                description={piece.description}
+                                footer={piece.brand}
+                                haveImage
+                            />
+                        ))}
+                    </div>
+                    <PaginationControls
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        pageSize={pageSize}
+                        onPageChange={setCurrentPage}
+                        onPageSizeChange={handleSizeChange}
+                        siblingCount={siblings}
+                    />
+                </Suspense>
+            ) : search !== "" ? (
+                <EmptyError />
+            ) : null}
             <DialogComponent
                 size="cover"
                 title="Detalles de la pieza"
                 content={
-                    selectedCardData && (
-                        <PiecesDialog data={selectedCardData} />
-                    )
+                    selectedCardData && <PiecesDialog data={selectedCardData} />
                 }
                 open={showDetailsDialog}
                 close={handleCloseDialog}

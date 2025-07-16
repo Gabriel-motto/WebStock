@@ -3,12 +3,13 @@
     display: inline-block;
 }
 
-.selected-item {
+.selector {
     border: 2px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
     padding: 5px;
-    width: 250px;
+    width: 100%;
+    min-width: 250px;
     justify-content: space-around;
 }
 
@@ -78,20 +79,26 @@
 
 .grid-item-filter {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(75px, 100px));
+    grid-template-columns: repeat(auto-fill, minmax(75px, 100px));
     gap: 5px;
     justify-content: center;
     width: 100%;
 }
 
 @media screen and (max-width: 768px) {
-    .selected-item {
+    .grid-item-filter {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    }
+    .css-1cyv60y {
         width: 100%;
     }
-    .text-selected {
-        width: 95%;
+    .selector {
+        width: 100%;
+        max-width: 250px;
+        min-width: 0px;
     }
-    .separator-icon {
-        width: 5%;
+    .options {
+        width: 250px;
     }
 }

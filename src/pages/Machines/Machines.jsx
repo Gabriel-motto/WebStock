@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useRef } from "react";
+import { useState, lazy, Suspense, useRef, useEffect } from "react";
 import PaginationControls from "@/components/ui/Pagination/Pagination.jsx";
 import { IoSearch } from "react-icons/io5";
 import {
@@ -12,12 +12,14 @@ import { SelectAssemblyLine } from "../../components/ui/Select/Select.jsx";
 import MachineDetails from "./MachineDetails.jsx";
 import { useMachines } from "../../hooks/useMachines";
 import { useDebounce } from "@uidotdev/usehooks";
+import { EmptyError } from "@/components/ui/EmptyStates";
 import "./Machines.css";
+import { Helix } from "ldrs/react";
+import "ldrs/react/Helix.css";
 
 const DialogComponent = lazy(() =>
     import("../../components/dialog/Dialog.jsx")
 );
-const CardComponent = lazy(() => import("../../components/card/Card.jsx"));
 
 function MachinesTable({ machines, handleClick }) {
     return (
@@ -34,7 +36,8 @@ function MachinesTable({ machines, handleClick }) {
                     <Table.Row
                         key={index}
                         onClick={() => handleClick(machine)}
-                        _hover={{ cursor: "pointer" }}>
+                        _hover={{ cursor: "pointer" }}
+                    >
                         <Table.Cell>{machine.name}</Table.Cell>
                         <Table.Cell>{machine.description}</Table.Cell>
                         <Table.Cell>{machine.aLine}</Table.Cell>
@@ -107,7 +110,8 @@ export default function MachinesPage() {
                 <div className="search-input-machines">
                     <InputGroup
                         startElement={<IoSearch className="search-icon" />}
-                        endElement={endElement}>
+                        endElement={endElement}
+                    >
                         <Input
                             className="search-machines"
                             placeholder="Buscar..."
@@ -118,27 +122,39 @@ export default function MachinesPage() {
                     </InputGroup>
                 </div>
             </div>
+            {totalPages !== 0 ? (
+                <>
+                    <div className="table-machines">
+                        {pageMachines ? (
+                            <MachinesTable
+                                machines={pageMachines}
+                                handleClick={handleOnClickMachine}
+                            />
+                        ) : null}
+                    </div>
+                    <PaginationControls
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        pageSize={pageSize}
+                        onPageChange={setCurrentPage}
+                        onPageSizeChange={handleSizeChange}
+                        siblingCount={siblings}
+                    />
+                </>
+            ) : search !== "" ? (
+                <EmptyError description="Ninguna máquina coincide con la busqueda" />
+            ) : null}
             <Suspense
-                className="loader"
-                fallback={<Spinner color="yellow.500" />}>
-                <div className="table-machines">
-                    {pageMachines ? (
-                        <MachinesTable
-                            machines={pageMachines}
-                            handleClick={handleOnClickMachine}
+                fallback={
+                    <div className="fallback">
+                        <Helix
+                            size="70"
+                            speed="2.5"
+                            color="black"
                         />
-                    ) : null}
-                </div>
-                <PaginationControls
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    pageSize={pageSize}
-                    onPageChange={setCurrentPage}
-                    onPageSizeChange={handleSizeChange}
-                    siblingCount={siblings}
-                />
-            </Suspense>
-            <Suspense fallback={<Spinner color="yellow.500" />}>
+                    </div>
+                }
+            >
                 <DialogComponent
                     scrollBehavior="inside"
                     size="cover"

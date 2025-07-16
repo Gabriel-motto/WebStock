@@ -81,7 +81,7 @@ export function SelectAssemblyLine({ dataFromChild, ...props }) {
                 className="custom-select"
                 {...props}>
                 <HStack
-                    className="selected-item"
+                    className="selector"
                     onClick={handleOpenSelect}>
                     <Text className="text-selected">Selecciona una línea</Text>
                     <HStack className="separator-icon">

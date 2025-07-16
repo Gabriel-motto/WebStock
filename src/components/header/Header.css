@@ -15,3 +15,17 @@
     height: 50px;
     margin: 15px;
 }
+
+.burger-menu {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .burger-menu {
+        display: block;
+        margin-right: .5rem;
+    }
+    .header-login {
+        display: none;
+    }
+}

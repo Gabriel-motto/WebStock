@@ -4,7 +4,7 @@ import Sidebar from "./components/sidebar/Sidebar.jsx";
 import Router from "./Router.jsx";
 import { ROUTES } from "./utils/consts";
 import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
     return (

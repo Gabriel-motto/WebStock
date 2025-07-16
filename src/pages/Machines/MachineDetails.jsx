@@ -1,10 +1,11 @@
 import "./MachineDetails.css";
-import { Separator, Table, Text } from "@chakra-ui/react";
+import { Separator, Table, Text, EmptyState, VStack } from "@chakra-ui/react";
 import { useSelectedMachine } from "@/hooks/useMachines";
 import { usePieces } from "@/hooks/usePieces";
 import { useState, useMemo, useRef } from "react";
 import PaginationControls from "@/components/ui/Pagination/Pagination.jsx";
 import { TabComponent } from "@/components/ui/tab-component";
+import { EmptyError } from "@/components/ui/EmptyStates";
 
 const tabData = [
     {
@@ -24,6 +25,11 @@ function PieceInfoTable({ pieces }) {
 
     // Recalcula cuando cambien props
     const refs = useMemo(() => pieces.map((p) => p.piece), [pieces]);
+    if (refs.length === 0) {
+        return (
+            <EmptyError />
+        );
+    }
     const details = usePieces({ multiple: refs });
 
     const totalPages = Math.ceil(pieces.length / pageSize);
