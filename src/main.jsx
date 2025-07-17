@@ -3,14 +3,14 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import { ColorModeProvider } from "./components/ui/color-mode";
+import { ThemeProvider } from "next-themes";
 
 createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Provider>
-            <ColorModeProvider forcedTheme="light">
+            <ThemeProvider enableSystem={false}>
                 <App />
-            </ColorModeProvider>
+            </ThemeProvider>
         </Provider>
     </React.StrictMode>
 );
