@@ -26,9 +26,7 @@ function PieceInfoTable({ pieces }) {
     // Recalcula cuando cambien props
     const refs = useMemo(() => pieces.map((p) => p.piece), [pieces]);
     if (refs.length === 0) {
-        return (
-            <EmptyError />
-        );
+        return <EmptyError />;
     }
     const details = usePieces({ multiple: refs });
 
@@ -119,7 +117,9 @@ export default function MachineDetails({ data }) {
                 ) : (
                     <div className="piece-related-content">
                         <div className="title">Piezas en la máquina</div>
-                        <PieceInfoTable pieces={pieces} />
+                        <div className="piece-body">
+                            <PieceInfoTable pieces={pieces} />
+                        </div>
                         <div className="additional-content"></div>
                     </div>
                 )}

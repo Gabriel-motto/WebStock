@@ -1,10 +1,6 @@
 import { useState, lazy, Suspense, useRef } from "react";
 import {
     Button,
-    Image,
-    Text,
-    Badge,
-    Separator,
     Fieldset,
     Field,
     Input,
@@ -15,13 +11,14 @@ import {
 } from "@chakra-ui/react";
 import { TabComponent } from "../../components/ui/tab-component.jsx";
 import DialogComponent from "../../components/dialog/Dialog.jsx";
-import { usePieces, useSelectedPiece } from "../../hooks/usePieces";
+import { usePieces } from "../../hooks/usePieces";
 import "./Pieces.css";
 import PiecesDialog from "./PiecesDetails.jsx";
 import PaginationControls from "@/components/ui/Pagination/Pagination";
 import { IoSearch } from "react-icons/io5";
 import { useDebounce } from "@uidotdev/usehooks";
 import { EmptyError } from "@/components/ui/EmptyStates.jsx";
+import { LoadingScreenHelix } from "@/components/loadingScreen/LoadingScreen.jsx";
 
 const tabData = [
     {
@@ -230,33 +227,36 @@ function PiecesPage() {
             />
             <div className="inner-header">
                 <TabComponent
+                    className="tab-compo"
                     tabContent={tabData}
                     defaultValue={"all"}
                     dataFromChild={handleWorkshopChange}
                 />
-                <InputGroup
-                    startElement={<IoSearch className="search-icon" />}
-                    endElement={endElement}
-                >
-                    <Input
-                        className="search-machines"
-                        placeholder="Buscar..."
-                        variant="flushed"
-                        value={search}
-                        onChange={handleSearch}
-                    />
-                </InputGroup>
-                <Button
-                    className="dialog-button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={setShowNewDialog}
-                >
-                    Añadir pieza
-                </Button>
+                <div className="search-button">
+                    <InputGroup
+                        startElement={<IoSearch className="search-icon" />}
+                        endElement={endElement}
+                    >
+                        <Input
+                            className="search-machines"
+                            placeholder="Buscar..."
+                            variant="flushed"
+                            value={search}
+                            onChange={handleSearch}
+                        />
+                    </InputGroup>
+                    <Button
+                        className="dialog-button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={setShowNewDialog}
+                    >
+                        Añadir pieza
+                    </Button>
+                </div>
             </div>
             {totalPages !== 0 ? (
-                <Suspense fallback={<Spinner />}>
+                <Suspense fallback={<LoadingScreenHelix />}>
                     <div className="grid-container">
                         {pagedPieces?.map((piece, index) => (
                             <CardComponent

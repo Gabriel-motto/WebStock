@@ -13,3 +13,16 @@
 .title {
     height: 50px;
 }
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: large;
+        font-weight:500;
+    }
+    .body {
+        gap: 10px;
+    }
+    .description {
+        padding-top: 5px;
+    }
+}

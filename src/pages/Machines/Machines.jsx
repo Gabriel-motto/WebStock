@@ -2,7 +2,6 @@ import { useState, lazy, Suspense, useRef, useEffect } from "react";
 import PaginationControls from "@/components/ui/Pagination/Pagination.jsx";
 import { IoSearch } from "react-icons/io5";
 import {
-    Spinner,
     Input,
     InputGroup,
     Table,
@@ -14,8 +13,8 @@ import { useMachines } from "../../hooks/useMachines";
 import { useDebounce } from "@uidotdev/usehooks";
 import { EmptyError } from "@/components/ui/EmptyStates";
 import "./Machines.css";
-import { Helix } from "ldrs/react";
-import "ldrs/react/Helix.css";
+import { LoadingScreenHelix } from "@/components/loadingScreen/LoadingScreen.jsx"
+
 
 const DialogComponent = lazy(() =>
     import("../../components/dialog/Dialog.jsx")
@@ -146,13 +145,7 @@ export default function MachinesPage() {
             ) : null}
             <Suspense
                 fallback={
-                    <div className="fallback">
-                        <Helix
-                            size="70"
-                            speed="2.5"
-                            color="black"
-                        />
-                    </div>
+                    <LoadingScreenHelix/>
                 }
             >
                 <DialogComponent

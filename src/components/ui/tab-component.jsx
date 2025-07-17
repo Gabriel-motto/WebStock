@@ -7,7 +7,7 @@ export function TabComponent({ tabContent, defaultValue, dataFromChild, ...props
 
     return (
         <>
-            <Tabs.Root defaultValue={defaultValue} onValueChange={handleTabsChange}>
+            <Tabs.Root defaultValue={defaultValue} onValueChange={handleTabsChange} {...props}>
                 <Tabs.List>
                     {tabContent.map((tab) => (
                         <Tabs.Trigger

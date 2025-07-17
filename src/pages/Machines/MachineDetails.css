@@ -28,5 +28,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    
+    .piece-body {
+        margin-left: -15px;
+    }
 }
