@@ -12,65 +12,65 @@ import {
     Portal,
 } from "@chakra-ui/react";
 
-function UserAvatar({ handleClick }) {
-    return (
-        <Menu.Root>
-            <Menu.Trigger asChild>
-                <Button variant="plain">
-                    <Stack gap="8">
-                        {users.map((user) => (
-                            <HStack
-                                key={user.email}
-                                gap="4"
-                            >
-                                <Avatar.Root>
-                                    <Avatar.Fallback name={user.name} />
-                                    <Avatar.Image src={user.avatar} />
-                                </Avatar.Root>
-                                <Stack gap="0">
-                                    <Text fontWeight="medium">{user.name}</Text>
-                                    <Text
-                                        color="fg.muted"
-                                        textStyle="sm"
-                                    >
-                                        {user.email}
-                                    </Text>
-                                </Stack>
-                            </HStack>
-                        ))}
-                    </Stack>
-                </Button>
-            </Menu.Trigger>
-            <Portal>
-                <Menu.Positioner>
-                    <Menu.Content>
-                        <Menu.Item value="Profile">Mi perfil</Menu.Item>
-                        <Menu.Item value="Settings">Configuración</Menu.Item>
-                        <Menu.Separator />
-                        <Menu.Item value="Logout">
-                            <button onClick={handleClick}>Cerrar sesión</button>
-                        </Menu.Item>
-                    </Menu.Content>
-                </Menu.Positioner>
-            </Portal>
-        </Menu.Root>
-    );
-};
+// function UserAvatar({ handleClick }) {
+//     return (
+//         <Menu.Root>
+//             <Menu.Trigger asChild>
+//                 <Button variant="plain">
+//                     <Stack gap="8">
+//                         {users.map((user) => (
+//                             <HStack
+//                                 key={user.email}
+//                                 gap="4"
+//                             >
+//                                 <Avatar.Root>
+//                                     <Avatar.Fallback name={user.name} />
+//                                     <Avatar.Image src={user.avatar} />
+//                                 </Avatar.Root>
+//                                 <Stack gap="0">
+//                                     <Text fontWeight="medium">{user.name}</Text>
+//                                     <Text
+//                                         color="fg.muted"
+//                                         textStyle="sm"
+//                                     >
+//                                         {user.email}
+//                                     </Text>
+//                                 </Stack>
+//                             </HStack>
+//                         ))}
+//                     </Stack>
+//                 </Button>
+//             </Menu.Trigger>
+//             <Portal>
+//                 <Menu.Positioner>
+//                     <Menu.Content>
+//                         <Menu.Item value="Profile">Mi perfil</Menu.Item>
+//                         <Menu.Item value="Settings">Configuración</Menu.Item>
+//                         <Menu.Separator />
+//                         <Menu.Item value="Logout">
+//                             <button onClick={handleClick}>Cerrar sesión</button>
+//                         </Menu.Item>
+//                     </Menu.Content>
+//                 </Menu.Positioner>
+//             </Portal>
+//         </Menu.Root>
+//     );
+// }
 
-const users = [
-    {
-        id: "1",
-        name: "Gabriel Motto",
-        email: "gabriel.motto@gkn.com",
-    },
-];
+// const users = [
+//     {
+//         id: "1",
+//         name: "Gabriel Motto",
+//         email: "gabriel.motto@gkn.com",
+//     },
+// ];
 
 export default function Header() {
-    const [isLogin, setIsLogin] = useState(false);
+    // const [isLogin, setIsLogin] = useState(false);
 
-    const handleClick = () => {
-        setIsLogin(!isLogin);
-    };
+    // const handleClick = () => {
+    //     setIsLogin(!isLogin);
+    // };
 
     return (
         <div className="header-content">
@@ -79,7 +79,7 @@ export default function Header() {
                 alt="GNK logo png sin fondo azul"
                 className="header-logo"
             />
-            <div className="header-login">
+            {/* <div className="header-login">
                 {isLogin ? (
                     <UserAvatar handleClick={handleClick} />
                 ) : (
@@ -91,7 +91,8 @@ export default function Header() {
                         Login
                     </Button>
                 )}
-            </div>
+            </div> */}
+
             <div className="burger-menu">
                 <CollapsedSidebar />
             </div>

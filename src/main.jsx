@@ -1,16 +1,16 @@
-import { Provider } from "./components/ui/provider";
+import { ChakraProvider, defaultSystem  } from "@chakra-ui/react"
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import { ThemeProvider } from "next-themes";
+import { ColorModeProvider } from "./components/ui/color-mode";
 
 createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <Provider>
-            <ThemeProvider enableSystem={false}>
+        <ChakraProvider value={defaultSystem}>
+            <ColorModeProvider forcedTheme="light">
                 <App />
-            </ThemeProvider>
-        </Provider>
+            </ColorModeProvider>
+        </ChakraProvider>
     </React.StrictMode>
 );
