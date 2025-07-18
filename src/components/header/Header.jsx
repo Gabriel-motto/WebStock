@@ -1,16 +1,5 @@
 import "./Header.css";
-import { useState } from "react";
-import { IoPersonOutline } from "react-icons/io5";
 import { CollapsedSidebar } from "@/components/sidebar/Sidebar";
-import {
-    Avatar,
-    HStack,
-    Stack,
-    Text,
-    Button,
-    Menu,
-    Portal,
-} from "@chakra-ui/react";
 
 // function UserAvatar({ handleClick }) {
 //     return (

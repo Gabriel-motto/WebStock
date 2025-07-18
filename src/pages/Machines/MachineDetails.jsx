@@ -1,5 +1,5 @@
 import "./MachineDetails.css";
-import { Separator, Table, Text, EmptyState, VStack } from "@chakra-ui/react";
+import { Separator, Table, Text } from "@chakra-ui/react";
 import { useSelectedMachine } from "@/hooks/useMachines";
 import { usePieces } from "@/hooks/usePieces";
 import { useState, useMemo, useRef } from "react";
@@ -46,14 +46,17 @@ function PieceInfoTable({ pieces }) {
 
     return (
         <>
-            <Table.Root>
+            <Table.Root stickyHeader>
+                <Table.ColumnGroup>
+                    <Table.Column htmlWidth="10%" />
+                    <Table.Column htmlWidth="2%" />
+                    <Table.Column/>
+                </Table.ColumnGroup>
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeader>Referencia</Table.ColumnHeader>
+                        <Table.ColumnHeader>Cantidad</Table.ColumnHeader>
                         <Table.ColumnHeader>Descripción</Table.ColumnHeader>
-                        <Table.ColumnHeader textAlign="end">
-                            Cantidad
-                        </Table.ColumnHeader>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -61,10 +64,10 @@ function PieceInfoTable({ pieces }) {
                         <Table.Row key={piece.id}>
                             <Table.Cell>{piece.name}</Table.Cell>
                             <Table.Cell>
-                                {piece.description || "Sin descripción"}
-                            </Table.Cell>
-                            <Table.Cell textAlign="end">
                                 <Text textStyle="xl">{pageAmounts[idx]}</Text>
+                            </Table.Cell>
+                            <Table.Cell>
+                                {piece.description || "Sin descripción"}
                             </Table.Cell>
                         </Table.Row>
                     ))}
@@ -84,8 +87,8 @@ function PieceInfoTable({ pieces }) {
 }
 
 export default function MachineDetails({ data }) {
-    const [selectedTab, setSelectedTab] = useState("summary");
     const pieces = useSelectedMachine(data.name);
+    const [selectedTab, setSelectedTab] = useState("summary");
 
     const handleTabChange = (e) => {
         setSelectedTab(e.value);

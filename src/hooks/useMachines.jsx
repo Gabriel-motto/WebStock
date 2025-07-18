@@ -13,7 +13,6 @@ export function useMachines(selectedALines, search, debouncedSearch) {
 export function useSelectedMachine(name) {
     const [pieces, setPieces] = useState([]);
 
-    
     useEffect(() => {
         getPiecesFromMachines(name).then(setPieces);
     }, [name])

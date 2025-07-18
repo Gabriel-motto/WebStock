@@ -30,31 +30,27 @@ export async function getPieces(workshop, search, multiple) {
 export async function getStockPiece(piece) {
     let machineStock = await supabase
         .from("machine_pieces")
-        .select("amount")
-        .eq("piece", `${piece}`);
+        .select()
+        .ilike("piece", `${piece}`);
     let warehouseStock = await supabase
         .from("Warehouse")
-        .select("amount")
-        .eq("piece", `${piece}`);
+        .select()
+        .ilike("piece", `${piece}`);
 
-    machineStock?.data.length === 0
-        ? (machineStock = 0)
-        : (machineStock = machineStock?.data[0].amount);
-    warehouseStock?.data.length === 0
-        ? (warehouseStock = 0)
-        : (warehouseStock = warehouseStock?.data[0].amount);
-
-    return machineStock + warehouseStock;
+    return {
+        machineStock: machineStock.data,
+        warehouseStock: warehouseStock.data,
+    };
 }
 
-export async function getPiecesFromWarehouse(piece) {
-    let query = supabase.from("Warehouse").select();
+// export async function getPiecesFromWarehouse(piece) {
+//     let query = supabase.from("Warehouse").select();
 
-    if (piece !== "") {
-        query = query.eq("piece", `${piece}`);
-    }
+//     if (piece !== "") {
+//         query = query.eq("piece", `${piece}`);
+//     }
 
-    const { data: pieces } = await query;
+//     const { data: pieces } = await query;
 
-    return pieces;
-}
+//     return pieces;
+// }
