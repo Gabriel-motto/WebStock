@@ -7,10 +7,17 @@ import { COLOR } from "@/utils/consts";
 
 export default function PiecesDetails({ data }) {
     const pieceData = useSelectedPiece(data.name);
-    let totalStock = 0;
-    pieceData?.machineStock.map((piece) => (
-        totalStock += piece.amount
-    ))
+
+    const totalInMachines =
+        pieceData?.machineStock.reduce((sum, p) => sum + p.amount, 0) || 0;
+    const totalInWarehouse = pieceData?.warehouseStock || 0;
+    const totalStock = totalInMachines + totalInWarehouse;
+    const machinesWithPiece = pieceData?.machineStock.length || 0;
+
+    const chartData = [
+        { name: "En máquinas", value: totalInMachines },
+        { name: "En almacén", value: totalInWarehouse },
+    ];
 
     return (
         <div className="summary-body">
@@ -58,36 +65,25 @@ export default function PiecesDetails({ data }) {
                         </Badge>
                     )}
                 </div>
-            </div>
-            <Separator
-                className="separator-dialog"
-                size="md"
-            />
-            <div className="stock-body">
-                <div className="general-stock-info">
-                    <Text>Número de máquinas que contienen esta pieza: {pieceData?.machineStock.length}</Text>
-                    <Text>Total de piezas: {totalStock}</Text>
-                </div>
                 <div className="charts">
-                    <Heading>Piezas en máquinas</Heading>
+                    <Heading>Stock máquinas/almacén</Heading>
                     <PieChart
                         width={350}
                         height={200}
                     >
                         <Pie
-                            data={pieceData?.machineStock}
-                            dataKey="amount"
-                            nameKey="machine"
+                            data={chartData}
+                            dataKey="value"
+                            nameKey="name"
                             outerRadius={80}
                             innerRadius={50}
-                            fill="#8884d8"
                             label
                         >
-                            {pieceData?.machineStock.map((entry, index) => (
+                            {chartData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
                                     fill={
-                                        index % 2 === 0
+                                        index === 0
                                             ? COLOR.CORPBLUE
                                             : COLOR.CORPYELLOW
                                     }
@@ -100,6 +96,41 @@ export default function PiecesDetails({ data }) {
                             height={36}
                         />
                     </PieChart>
+                </div>
+            </div>
+            <Separator
+                className="separator-dialog"
+                size="md"
+            />
+            <div className="stock-body">
+                <div className="general-stock-info">
+                    <Text textStyle="lg" >Total de piezas:</Text>
+                    <Text textStyle="7xl" fontWeight="bold">{totalStock}</Text>
+                </div>
+                <div className="machines-list">
+                    <Heading
+                        size="xl"
+                    >
+                        Máquinas que contienen esta pieza
+                    </Heading>
+                    {machinesWithPiece === 0 ? (
+                        <Text color="gray.500">
+                            Ninguna máquina contiene esta pieza.
+                        </Text>
+                    ) : (
+                        <ul>
+                            {pieceData.machineStock.map((m) => (
+                                <li key={m.machine}>
+                                    <Text textStyle="lg" >
+                                        <span>{m.machine}</span>:{" "} {m.amount}
+                                        {m.amount > 1
+                                            ? " piezas"
+                                            : " pieza"}
+                                    </Text>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </div>

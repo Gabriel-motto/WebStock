@@ -1,4 +1,3 @@
-
 export const EVENTS = {
     PUSHSTATE: 'pushstate',
     POPSTATE: 'popstate'
@@ -8,6 +7,7 @@ export const EVENTS = {
 import HomePage from "../pages/Home.jsx";
 import MachinesPage from "../pages/Machines/Machines.jsx";
 import PiecesPage from "../pages/Pieces/Pieces.jsx";
+import PiecesDialog from "../pages/Pieces/PiecesDetails.jsx";
 import SummaryPage from "../pages/Summary.jsx";
 export const ROUTES = [
     {
@@ -20,6 +20,10 @@ export const ROUTES = [
     },
     {
         path: "/pieces",
+        Component: PiecesPage
+    },
+    {
+        path: "/pieces/:name",
         Component: PiecesPage
     },
     {

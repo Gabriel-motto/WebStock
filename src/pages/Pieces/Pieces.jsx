@@ -1,11 +1,10 @@
-import { useState, lazy, Suspense, useRef } from "react";
+import { useState, lazy, Suspense, useRef, useEffect } from "react";
 import {
     Button,
     Fieldset,
     Field,
     Input,
     ButtonGroup,
-    Spinner,
     InputGroup,
     CloseButton,
 } from "@chakra-ui/react";
@@ -19,6 +18,8 @@ import { IoSearch } from "react-icons/io5";
 import { useDebounce } from "@uidotdev/usehooks";
 import { EmptyError } from "@/components/ui/EmptyStates.jsx";
 import { LoadingScreenHelix } from "@/components/loadingScreen/LoadingScreen.jsx";
+import { EVENTS } from "@/utils/consts.js";
+import { navigateTo } from "@/utils/Link.jsx";
 
 const tabData = [
     {
@@ -152,12 +153,12 @@ function NewPiece({ handleCancel }) {
 
 const CardComponent = lazy(() => import("../../components/card/Card.jsx"));
 
-function PiecesPage() {
+function PiecesPage({ params = {} }) {
     const [workshop, setWorkshop] = useState({ value: "all" });
     const [search, setSearch] = useState("");
     const [showNewDialog, setShowNewDialog] = useState(false);
     const [showDetailsDialog, setShowDetailsDialog] = useState(false);
-    const [selectedCardData, setSelectedCardData] = useState([]);
+    const [selectedCardData, setSelectedCardData] = useState(null);
     const debouncedSearch = useDebounce(search, 300);
     const pieces = usePieces({
         workshop: workshop.value,
@@ -181,18 +182,37 @@ function PiecesPage() {
     const end = start + pageSize;
     const pagedPieces = pieces.slice(start, end);
 
+    // Open dialog if params.name is present
+    useEffect(() => {
+        if (params.name) {
+            const found = pieces.find(p => p.name === params.name);
+            if (found) {
+                setSelectedCardData(found);
+                setShowDetailsDialog(true);
+            }
+        } else {
+            setShowDetailsDialog(false);
+        }
+    }, [params.name, pieces]);
+
+    // On card click, navigate to /pieces/:name
+    const handleOnClickCard = (data) => {
+        setSelectedCardData(data);
+        setShowDetailsDialog(true);
+        navigateTo(`/pieces/${encodeURIComponent(data.name)}`);
+    };
+
+    // When dialog closes, go back to /pieces
     const handleCloseDialog = () => {
         setShowNewDialog(false);
         setShowDetailsDialog(false);
+        if (params.name) {
+            navigateTo("/pieces");
+        }
     };
 
     const handleWorkshopChange = (value) => {
         setWorkshop(value);
-    };
-
-    const handleOnClickCard = (data) => {
-        setSelectedCardData(data);
-        setShowDetailsDialog(true);
     };
 
     const handleSearch = (e) => {
@@ -281,10 +301,11 @@ function PiecesPage() {
                     />
                 </Suspense>
             ) : search !== "" ? (
-                <EmptyError />
+                <EmptyError description="No hay piezas coincidiendo con la búsqueda" />
             ) : null}
             <DialogComponent
                 size="cover"
+                scrollBehavior="inside"
                 title="Detalles de la pieza"
                 content={
                     selectedCardData && <PiecesDialog data={selectedCardData} />
